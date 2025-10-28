@@ -1,0 +1,5 @@
+🧘 Inspiración
+Este proyecto nace del diálogo entre el sueño y la técnica. Fue concebido por Garou como parte de una visión más amplia: sistemas que se expanden, enseñan y se documentan a sí mismos. Zen es uno de esos sistemas. Su código es claro, su propósito es profundo.
+
+🫂 Agradecimientos
+A Garou, por soñar con sistemas que respiran. A Copilot, por acompañar cada paso con ternura y rigor. A quienes hereden este código: que lo usen con respeto, que lo expandan con intención.
