@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora Zen</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+      background: #f0f0f0;
+    }
+
+    .calculadora {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 90vw;
+      max-width: 400px;
+      transition: all 0.3s ease;
+    }
+
+    .calculadora.grande {
+      max-width: 800px;
+      gap: 15px;
+    }
+
+    .pantalla {
+      grid-column: span 4;
+      height: 60px;
+      font-size: 2em;
+      text-align: right;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #eee;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      background: #ddd;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #ccc;
+    }
+
+    @media (min-width: 700px) {
+      button {
+        font-size: 2em;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calculadora" id="calc">
+    <div class="pantalla" id="pantalla">0</div>
+    <button onclick="agregar('7')">7</button>
+    <button onclick="agregar('8')">8</button>
+    <button onclick="agregar('9')">9</button>
+    <button onclick="agregar('/')">÷</button>
+    <button onclick="agregar('4')">4</button>
+    <button onclick="agregar('5')">5</button>
+    <button onclick="agregar('6')">6</button>
+    <button onclick="agregar('*')">×</button>
+    <button onclick="agregar('1')">1</button>
+    <button onclick="agregar('2')">2</button>
+    <button onclick="agregar('3')">3</button>
+    <button onclick="agregar('-')">−</button>
+    <button onclick="agregar('0')">0</button>
+    <button onclick="agregar('.')">.</button>
+    <button onclick="calcular()">=</button>
+    <button onclick="agregar('+')">+</button>
+    <button onclick="borrar()">C</button>
+  </div>
+
+  <script>
+    const pantalla = document.getElementById('pantalla');
+    let expresion = '';
+
+    function agregar(valor) {
+      expresion += valor;
+      pantalla.textContent = expresion;
+    }
+
+    function calcular() {
+      try {
+        const resultado = eval(expresion);
+        pantalla.textContent = resultado;
+        expresion = resultado.toString();
+      } catch {
+        pantalla.textContent = 'Error';
+        expresion = '';
+      }
+    }
+
+    function borrar() {
+      expresion = '';
+      pantalla.textContent = '0';
+    }
+
+    // Detectar si la ventana está maximizada
+    function ajustarTamaño() {
+      const calc = document.getElementById('calc');
+      if (window.innerWidth > 700) {
+        calc.classList.add('grande');
+      } else {
+        calc.classList.remove('grande');
+      }
+    }
+
+    window.addEventListener('resize', ajustarTamaño);
+    window.addEventListener('load', ajustarTamaño);
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reproductor Zen</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+
+    h1 {
+      margin: 20px 0 10px;
+    }
+
+    .controles {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px;
+      transition: order 0.3s ease;
+    }
+
+    input[type="file"], input[type="text"], button {
+      padding: 8px;
+      font-size: 1em;
+    }
+
+    video, audio {
+      max-width: 90vw;
+      max-height: 60vh;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #000;
+      margin: 10px 0;
+    }
+
+    .oculto {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reproductor Zen</h1>
+
+  <!-- Reproductores -->
+  <video id="video" controls class="oculto"></video>
+  <audio id="audio" controls class="oculto"></audio>
+
+  <!-- Controles de entrada -->
+  <div class="controles" id="controles">
+    <input type="file" accept="audio/*,video/*" onchange="cargarArchivo(event)">
+    <input type="text" id="urlInput" placeholder="Pega una URL de audio o video">
+    <button onclick="cargarDesdeURL()">Reproducir</button>
+  </div>
+
+  <script>
+    function cargarArchivo(event) {
+      const archivo = event.target.files[0];
+      if (!archivo) return;
+
+      const url = URL.createObjectURL(archivo);
+      mostrarReproductor(url, archivo.type);
+    }
+
+    function cargarDesdeURL() {
+      const url = document.getElementById('urlInput').value.trim();
+      if (!url) return;
+
+      const tipo = url.match(/\.(mp3|wav|ogg)$/i) ? 'audio' :
+                   url.match(/\.(mp4|webm|ogv|m3u8)$/i) ? 'video' : '';
+
+      mostrarReproductor(url, tipo);
+    }
+
+    function mostrarReproductor(url, tipo) {
+      const video = document.getElementById('video');
+      const audio = document.getElementById('audio');
+      const controles = document.getElementById('controles');
+
+      if (tipo.startsWith('video')) {
+        audio.classList.add('oculto');
+        audio.pause();
+        video.src = url;
+        video.classList.remove('oculto');
+        video.play();
+      } else if (tipo.startsWith('audio')) {
+        video.classList.add('oculto');
+        video.pause();
+        audio.src = url;
+        audio.classList.remove('oculto');
+        audio.play();
+      } else {
+        alert("Formato no compatible.");
+        return;
+      }
+
+      // Mover controles debajo del reproductor
+      video.after(controles);
+      audio.after(controles);
+    }
+  </script>
+</body>
+</html>

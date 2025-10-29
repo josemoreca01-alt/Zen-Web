@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor Zen</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+    }
+    #topbar {
+      background-color: #333;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #searchEngine, #navInput {
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: none;
+    }
+    #navInput {
+      flex: 1;
+      font-size: 16px;
+    }
+    #toolbar {
+      background-color: #eee;
+      padding: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ccc;
+    }
+    #toolbar button {
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #editor {
+      padding: 20px;
+      height: calc(100vh - 120px);
+      overflow-y: auto;
+      background-color: #fff;
+      border-top: 1px solid #ccc;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    #editor:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="topbar">
+    <select id="searchEngine">
+      <option value="google">Google</option>
+      <option value="duckduckgo">DuckDuckGo</option>
+      <option value="brave">Brave</option>
+      <option value="ecosia">Ecosia</option>
+    </select>
+    <input type="text" id="navInput" placeholder="Escribe una URL, ruta o búsqueda y presiona Enter">
+    <input type="file" id="fileInput" accept=".txt,.html" style="display:none">
+    <button onclick="document.getElementById('fileInput').click()">Abrir</button>
+    <button onclick="saveContent()">Guardar</button>
+  </div>
+
+  <div id="toolbar">
+    <button onclick="execCmd('bold')"><b>Negrita</b></button>
+    <button onclick="execCmd('italic')"><i>Cursiva</i></button>
+    <button onclick="execCmd('underline')"><u>Subrayado</u></button>
+    <button onclick="execCmd('insertUnorderedList')">• Lista</button>
+    <button onclick="execCmd('insertOrderedList')">1. Lista</button>
+    <button onclick="execCmd('formatBlock','<h1>')">H1</button>
+    <button onclick="execCmd('formatBlock','<h2>')">H2</button>
+    <button onclick="insertLink()">🔗 Enlace</button>
+  </div>
+
+  <div id="editor" contenteditable="true" spellcheck="true">
+    <p>Escribe aquí tu texto…</p>
+  </div>
+
+  <script>
+    const input = document.getElementById('navInput');
+    const engineSelect = document.getElementById('searchEngine');
+    const editor = document.getElementById('editor');
+    const fileInput = document.getElementById('fileInput');
+
+    function getSearchURL(engine, query) {
+      switch (engine) {
+        case 'duckduckgo': return `https://duckduckgo.com/?q=${query}`;
+        case 'brave': return `https://search.brave.com/search?q=${query}`;
+        case 'ecosia': return `https://www.ecosia.org/search?q=${query}`;
+        default: return `https://www.google.com/search?q=${query}`;
+      }
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const value = input.value.trim();
+        const engine = engineSelect.value;
+
+        if (value.startsWith('http://') || value.startsWith('https://')) {
+          window.location.href = value;
+        } else if (value.includes('.') && !value.includes(' ')) {
+          window.location.href = `https://www.${value}`;
+        } else {
+          const query = encodeURIComponent(value);
+          window.location.href = getSearchURL(engine, query);
+        }
+      }
+    });
+
+    function execCmd(cmd, value = null) {
+      document.execCommand(cmd, false, value);
+    }
+
+    function insertLink() {
+      const url = prompt("Introduce la URL:");
+      if (url) execCmd("createLink", url);
+    }
+
+    function saveContent() {
+      const blob = new Blob([editor.innerHTML], { type: "text/html" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "texto.html";
+      a.click();
+    }
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        editor.innerHTML = reader.result;
+      };
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+#editor {
+  padding: 20px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  font-size: 16px;
+  line-height: 1.6;
+}
+#editor:focus {
+  outline: none;
+}

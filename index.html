@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenida a Zen-Web</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #fff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      color: #333;
+    }
+    h1 {
+      font-size: 48px;
+      margin: 20px 0 10px;
+    }
+    p {
+      font-size: 18px;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    .botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    iframe {
+      width: 90%;
+      height: 600px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenida a Zen-Web</h1>
+  <p>Selecciona una aplicación para usarla directamente aquí:</p>
+
+  <div class="botones">
+    <button onclick="abrirApp('calculadora.html')">🧮 Calculadora</button>
+    <button onclick="abrirApp('editor.html')">📝 Editor</button>
+    <button onclick="abrirApp('player.html')">🎵 Reproductor</button>
+    <button onclick="abrirApp('https://copilot.microsoft.com')">🔍 Copilot</button>
+  </div>
+
+  <iframe id="visor" src="" title="Aplicación Zen"></iframe>
+
+  <script>
+    function abrirApp(url) {
+      document.getElementById('visor').src = url;
+      document.getElementById('visor').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor Zen</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #toolbar {
+      background: #eee;
+      padding: 10px;
+    }
+    #editor {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      resize: none;
+      font-size: 16px;
+      overflow-y: auto;
+    }
+    button, input[type="file"] {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <button onclick="document.execCommand('bold')">Negrita</button>
+    <button onclick="document.execCommand('italic')">Cursiva</button>
+    <button onclick="document.execCommand('underline')">Subrayado</button>
+    <button onclick="guardar()">Guardar</button>
+    <input type="file" accept=".txt,.html" onchange="abrirArchivo(event)">
+  </div>
+  <div id="editor" contenteditable="true">
+    Escribe tu texto aquí...
+  </div>
+
+  <script>
+    function guardar() {
+      const contenido = document.getElementById('editor').innerHTML;
+
+      // Extraer primera palabra del texto plano
+      const textoPlano = document.getElementById('editor').innerText.trim();
+      const primeraPalabra = textoPlano.split(/\s+/)[0] || "texto";
+
+      // Obtener fecha y hora actual
+      const ahora = new Date();
+      const fecha = ahora.toISOString().slice(0, 10); // YYYY-MM-DD
+      const hora = ahora.toTimeString().slice(0, 5).replace(":", "-"); // HH-MM
+
+      const nombreArchivo = `${primeraPalabra}_${fecha}_${hora}.html`;
+
+      // Crear y descargar el archivo
+      const blob = new Blob([contenido], { type: 'text/html' });
+      const enlace = document.createElement('a');
+      enlace.href = URL.createObjectURL(blob);
+      enlace.download = nombreArchivo;
+      enlace.click();
+      URL.revokeObjectURL(enlace.href);
+    }
+
+    function abrirArchivo(event) {
+      const archivo = event.target.files[0];
+      if (!archivo) return;
+
+      const lector = new FileReader();
+      lector.onload = function(e) {
+        document.getElementById('editor').innerHTML = e.target.result;
+      };
+      lector.readAsText(archivo);
+    }
+  </script>
+</body>
+</html>
