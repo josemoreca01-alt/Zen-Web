@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Zen Web
+Comment=Aplicación Zen Web
+Exec=/opt/zen-web/zen-web
+Icon=/opt/zen-web/enso.png
+Terminal=false
+Type=Application
+Categories=Network;
+
